@@ -110,12 +110,12 @@ async function deleteMessages(authToken, authorId, guildId, channelId, minId, ma
                 const w = (await resp.json()).retry_after;
                 throttledCount++;
                 throttledTotalTime += w;
-                searchDelay += w; // increase delay
+                //searchDelay += w; // increase delay
                 log.warn(`Being rate limited by the API for ${w}ms! Increasing search delay...`);
                 printDelayStats();
-                log.verb(`Cooling down for ${w * 2}ms before retrying...`);
+                log.verb(`Cooling down for ${w}ms before retrying...`);
 
-                await wait(w * 2);
+                await wait(w);
                 return await recurse();
             } else {
                 return log.error(`Error searching messages, API responded with status ${resp.status}!\n`, await resp.json());
@@ -186,11 +186,11 @@ async function deleteMessages(authToken, authorId, guildId, channelId, minId, ma
                         const w = (await resp.json()).retry_after;
                         throttledCount++;
                         throttledTotalTime += w;
-                        deleteDelay = w; // increase delay
+                        //deleteDelay = w; // increase delay
                         log.warn(`Being rate limited by the API for ${w}ms! Adjusted delete delay to ${deleteDelay}ms.`);
                         printDelayStats();
-                        log.verb(`Cooling down for ${w * 2}ms before retrying...`);
-                        await wait(w * 2);
+                        log.verb(`Cooling down for ${w}ms before retrying...`);
+                        await wait(w);
                         i--; // retry
                     } else {
                         log.error(`Error deleting message, API responded with status ${resp.status}!`, await resp.json());
